@@ -1,20 +1,29 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import express from 'express';
+import path  from 'path';
+import http from 'http';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+import indexRouter from './route/index';
+import usersRouter from './route/users';
+import developersRouter from './route/developers.js';
 
-var app = express();
+import model from './model/index';
+
+require('dotenv').config();
+
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/developers', developersRouter);
 
-module.exports = app;
+app.listen(process.env.PORT, () =>{
+  console.log('Server running on port: '+ process.env.PORT);
+});
